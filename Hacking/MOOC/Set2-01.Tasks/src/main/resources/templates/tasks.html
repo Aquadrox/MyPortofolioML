@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head lang="en">
+        <meta charset="UTF-8" />
+        <title>Tasks</title>
+    </head>
+    <body>
+
+        <h2>Tasks</h2>
+
+        <!-- TODO: add the ability to list tasks -->
+        <ul id="tasks" style="list-style-type:decimal;">
+        </ul>
+        
+        
+        <form>
+            <input type="text" name="name" id="name"/>
+            <input type="button" onclick="addTask();" value="Add!"/>
+        </form>
+        <form>
+            <input type="text" name="name" id="delete"/>
+            <input type="button" onclick="deleteTask();" value="Delete!"/>
+        </form>
+        <form>
+            <input type="button" onclick="showTask();" value="Show data!"/>
+        </form>
+
+        <!-- the javascript has been embedded to the same site -->
+        <script th:inline="javascript">
+            
+            // The URL to the application server that holds the tasks.
+            var url = /*[[@{/tasks}]]*/ null;
+
+            function loadTasks() {
+                //source: https://stackoverflow.com/questions/7393484/xmlhttprequest-asynchronous-not-working-always-returns-status-0
+                
+                var handleResponse = function (status, response) {
+                    //alert(response);
+                    JSON.parse(response).forEach((obj) => {
+                       //alert(obj.name);
+                       addTaskToList2(obj.name);
+                        //alert('name:', obj.name.values());
+                    });  
+                };
+                
+                
+                var handleStateChange = function () {
+                   switch (xmlhttp.readyState) {
+                      case 0 : // UNINITIALIZED
+                      case 1 : // LOADING
+                      case 2 : // LOADED
+                      case 3 : // INTERACTIVE
+                      break;
+                      case 4 : // COMPLETED: only called there, as we don't  care about the others
+                      handleResponse(xmlhttp.status, xmlhttp.responseText);
+                      break;
+                      default: alert("error");
+                   }
+                };
+                
+                
+                var xmlhttp=new XMLHttpRequest(); //XMLHttpRequest { status=0, readyState=0, multipart=false, onreadystatechange=handleEvent()}
+                xmlhttp.onreadystatechange=handleStateChange; //event handler for .onreadystatechange, call handleStateChange
+                xmlhttp.open("GET",url,true); //asynchronous GET Request to fetch the Page url
+                xmlhttp.send(null); //send request
+                
+            }
+
+            function addTask() {
+                var name = document.querySelector("#name").value;
+                if (!name) {
+                    return;
+                }
+
+                console.log(name);
+
+                var http = new XMLHttpRequest();
+                http.open("POST", url, true);
+                //alert("1:" + http.status);
+                http.setRequestHeader("Content-type", "application/json");
+                var data = new Object();
+                data.name = name;
+                //alert("2:" + http.status);
+                http.onreadystatechange = function () {
+                //alert("3:" + http.status);
+                    if (http.readyState === 4) {
+                        if (http.status === 200) {
+                            addTaskToList(JSON.parse(http.responseText));
+                        }
+                    }
+                };
+
+                http.send(JSON.stringify(data));
+            }
+
+
+            function addTaskToList(task) {
+                var liElement = document.createElement("li");
+                liElement.appendChild(document.createTextNode(task.name));
+                //alert(task.name);
+                document.querySelector("#tasks").appendChild(liElement);
+            }
+            
+            function addTaskToList2(task) {
+                var liElement = document.createElement("li");
+                liElement.appendChild(document.createTextNode(task));
+                //alert(task.name);
+                document.querySelector("#tasks").appendChild(liElement);
+            }
+            
+            function deleteTask() {};
+            
+            function showTask() {
+                
+                var handleResponse = function (status, response) {
+                    alert(response);
+                };
+                
+                
+                var handleStateChange = function () {
+                   switch (xmlhttp.readyState) {
+                      case 0 : // UNINITIALIZED
+                      case 1 : // LOADING
+                      case 2 : // LOADED
+                      case 3 : // INTERACTIVE
+                      break;
+                      case 4 : // COMPLETED: only called there, as we don't  care about the others
+                      handleResponse(xmlhttp.status, xmlhttp.responseText);
+                      break;
+                      default: alert("error");
+                   }
+                };
+                
+                
+                var xmlhttp=new XMLHttpRequest(); //XMLHttpRequest { status=0, readyState=0, multipart=false, onreadystatechange=handleEvent()}
+                xmlhttp.onreadystatechange=handleStateChange; //event handler for .onreadystatechange, call handleStateChange
+                xmlhttp.open("GET",url,true); //asynchronous GET Request to fetch the Page url
+                xmlhttp.send(null); //send request
+                
+                
+            };
+
+
+            window.onload = function () {
+                loadTasks();
+            };
+        </script>
+    </body>
+</html>
