@@ -1,0 +1,4 @@
+sec\banktransfer\Account.class
+sec\banktransfer\AccountRepository.class
+sec\banktransfer\BankingController.class
+sec\banktransfer\BankTransferApplication.class
