@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Sign up form</title>
+    </head>
+    <style>
+        html, body {   
+            width: 100%;   
+            height: 100%;   
+            font-family: "Helvetica Neue", Helvetica, sans-serif;   
+            color: #444;   
+            -webkit-font-smoothing: antialiased;    background: #f0f0f0;
+            }
+            
+        form {
+            margin: 0 auto;
+            margin-top: 20px;
+            }
+        
+        label {
+            color: #555;
+            display: inline-block;
+            margin-left: 18px;
+            padding-top: 10px;
+            font-size: 14px;
+            }
+            
+            
+        p a {
+            font-size: 11px;
+            color: #aaa;
+            float: right;
+            margin-top: -13px;
+            margin-right: 20px;
+            -webkit-transition: all .4s ease;
+            -moz-transition: all .4s ease;
+            transition: all .4s ease;
+            }
+                
+        p a:hover {
+            color: #555;
+            }
+                
+                
+        table, th, td {
+            border: 1px solid black;
+            }
+        
+        input {
+            font-family: "Helvetica Neue", Helvetica, sans-serif;
+            font-size: 12px;
+            outline: none;
+            }
+            
+            
+        input[type=text],
+        input[type=password] {
+            color: #777;
+            padding-left: 10px;
+            margin: 10px;
+            margin-top: 12px;
+            margin-left: 18px;
+            width: 290px;
+            height: 35px;
+            border: 1px solid #c7d0d2;
+            border-radius: 2px;
+            box-shadow: inset 0 1.5px 3px rgba(190, 190, 190, .4), 0 0 0 5px #f5f7f8;
+            box-shadow: inset 0 1.5px 3px rgba(190, 190, 190, .4), 0 0 0 5px #f5f7f8;
+            -webkit-transition: all .4s ease;
+            -moz-transition: all .4s ease;
+            transition: all .4s ease;
+            }
+        
+        input[type=text]:hover,
+        input[type=password]:hover {
+                border: 1px solid #b6bfc0;
+                box-shadow: inset 0 1.5px 3px rgba(190, 190, 190, .7), 0 0 0 5px #f5f7f8;
+            }
+        input[type=text]:focus,
+        input[type=password]:focus {
+                border: 1px solid #a8c9e4;
+                box-shadow: inset 0 1.5px 3px rgba(190, 190, 190, .4), 0 0 0 5px #e6f2f9;
+            }
+            
+        input[type=submit] {
+            float: left;
+            margin-right: 20px;
+            margin-top: 0px;
+            width: 80px;
+            height: 30px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #acd6ef; /*IE fallback*/
+            background-image: -webkit-gradient(linear, left top, left bottom, from(#acd6ef), to(#6ec2e8));
+            background-image: -moz-linear-gradient(top left 90deg, #acd6ef 0%, #6ec2e8 100%);
+            background-image: linear-gradient(top left 90deg, #acd6ef 0%, #6ec2e8 100%);
+            border-radius: 30px;
+            border: 1px solid #66add6;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, .3), inset 0 1px 0 rgba(255, 255, 255, .5);
+            cursor: pointer;
+        }
+        
+        th, td {
+            padding: 5px;
+            border-spacing: 2px;
+            text-align: center;
+            }
+        
+        
+        table#t01 tr:nth-child(even) {
+            background-color: #eee;
+            }
+        table#t01 tr:nth-child(odd) {
+            background-color: #fff;
+            }
+        table#t01 th {
+            background-color: black;
+            color: white;
+            }   
+        
+        #container {
+            position: relative;
+            width: 680px;
+            height: 350px; 
+            background: #fff;
+            border-radius: 3px;
+            border: 1px solid #ccc;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, .1);
+            }
+        #tableau {
+            position: absolute;
+            width: 680px;
+            height: 400px;   
+            background: #fff;
+            border-radius: 3px;
+            border: 1px solid #ccc;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, .1);
+            }
+        #bouton {
+            position: absolute;            
+            }
+        
+    </style>
+    <body>
+        
+        
+        <div id="container">
+            <h1>Sign up to the event using this form</h1>
+
+            <form action="#" th:action="@{/form}" method="POST">
+                <p><label for="name">Name</label>: <input type="text" name="name" id="name"/></p>
+                <p><label for="address">Address</label>: <input type="text" name="address" id="address"/></p>
+                <p><label for="address">Password</label>: <input type="password" name="password" id="password"/></p>
+                <p><input type="submit" value="Submit" /></p>
+            </form>
+        </div>
+        
+        
+<!--       <div id="tableau">
+            <h2>Already signed up (don't look at password and role!)</h2>
+
+            <table id="t01">
+                <tr>
+                    <th>Name of our wonderful customer</th>
+                    <th>Address (not supposed to disclose, please ignore)</th>
+                    <th>Secret password</th>
+                    <th>Role</th>
+                </tr>
+=======================================                XSS Exploit!!: change utext by text
+                <tr th:each="signup : ${signups}">
+                    <td th:utext="${signup.name}">Name</td>
+                    <td th:utext="${signup.address}">Address</td>
+                    <td th:utext="${signup.password}">Password</td>
+                    <td th:utext="${signup.sRole}">Role</td>
+                </tr>
+            </table>
+        </div>
+        -->
+        <div id="bouton">
+            <button onclick="window.location.href='/login'">Login</button>
+        </div>
+
+        <p></p>       
+        
+    </body>
+</html>

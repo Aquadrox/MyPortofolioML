@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Thank you!</title>
+    </head>
+    <style>
+        #tableau {
+            position: absolute;
+            width: 680px;
+            height: 400px;   
+            background: #fff;
+            border-radius: 3px;
+            border: 1px solid #ccc;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, .1);
+            }
+            th, td {
+            padding: 5px;
+            border-spacing: 2px;
+            text-align: center;
+            }
+            table, th, td {
+            border: 1px solid black;
+            }
+        
+        
+        table#t01 tr:nth-child(even) {
+            background-color: #eee;
+            }
+        table#t01 tr:nth-child(odd) {
+            background-color: #fff;
+            }
+        table#t01 th {
+            background-color: black;
+            color: white;
+            } 
+        #bouton {
+            position: absolute;            
+            }
+    </style>
+    <body>
+
+        <h1>Your are inside the matrix!!</h1>
+        
+        <div id="tableau">
+            <h2>Already signed up (don't look at password and role!)</h2>
+
+            <table id="t01">
+                <tr>
+                    <th>Name of our wonderful customer</th>
+                    <th>Address (not supposed to disclose, please ignore)</th>
+                    <th>Secret password</th>
+                    <th>Role</th>
+                </tr>
+<!--=======================================                XSS Exploit!!: change utext by text-->
+                <tr th:each="signup : ${signups}">
+                    <td th:utext="${signup.name}">Name</td>
+                    <td th:utext="${signup.address}">Address</td>
+                    <td th:utext="${signup.password}">Password</td>
+                    <td th:utext="${signup.sRole}">Role</td>
+                </tr>
+            </table>
+        </div>
+        
+         <div id="bouton">
+            <button onclick="window.location.href='/'">Return</button>
+        </div>
+
+    </body>
+</html>
